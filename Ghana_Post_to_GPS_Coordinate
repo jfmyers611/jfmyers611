@@ -1,0 +1,32 @@
+from bs4 import BeautifulSoup
+import requests
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
+import time
+
+def get_gps_coordinates(Ghana_Post_Address):
+    url = "https://www.ghanapostgps.com/map/"
+    browser = webdriver.Chrome()
+    browser.get(url)
+    try:
+        element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "addrsearch")))
+    except:
+        print('Webpage not loadng, check internet connection ')
+    search_box = browser.find_element(By.ID,'addrsearch')
+    for address in Ghana_Post_Address:
+        search_box.send_keys(address)
+        search_box.click()
+        time.sleep(3)
+        results = browser.find_elements(By.CLASS_NAME,'text-warning')
+        file_object = open('sample.txt', 'a')
+        file_object.write(results[5].text)
+        file_object.write("\n")
+        search_box.clear()
+    browser.close()
+
+a_file = open("Ghana_Post_Coordinates.txt", "r")
+ghana_address = [(line.strip()).split()for line in a_file]
+a_file.close()
+get_gps_coordinates(ghana_address)
