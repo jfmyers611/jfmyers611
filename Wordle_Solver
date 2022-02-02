@@ -1,0 +1,88 @@
+#WORDLE SOLVER
+from english_words import english_words_alpha_set
+
+def number_letter_words(number_of_words):
+    word_list = list(english_words_alpha_set)
+    number_word_list = []
+    for a in word_list:
+        if len(a) == (number_of_words):
+            number_word_list.append(a)
+    return number_word_list
+
+
+def wordle_word_generator(number_of_words,positional_letters_known,other_letters_known,letters_not_part):  
+    possible_words = number_letter_words(number_of_words)
+    
+    for word in list(possible_words):
+        for letters in letters_not_part:
+            if word.count(letters) >= 1:
+                possible_words.remove(word)
+                break
+          
+    for word in list(possible_words):
+        for letterword in other_letters_known:
+            for a in range(number_of_words):
+                if letterword[a] != '0':
+                    if word.count(letterword[a]) == 0:
+                        possible_words.remove(word)
+                        break
+                    if letterword[a] == word[a]:
+                        possible_words.remove(word)
+                        break
+            else:
+                continue
+            break
+
+    for word in list(possible_words):
+        for a in range(number_of_words):
+            if positional_letters_known == '':
+                break
+            elif positional_letters_known[a] != '0':
+                if positional_letters_known[a] != word[a]:
+                    possible_words.remove(word)
+                    break
+              
+    return possible_words[0]
+
+
+number_of_words = int(input("Enter number of letters: "))
+#number_of_words = int(number_of_words1)
+a = wordle_word_generator(number_of_words,'',[],[])
+print(a)
+
+i = 1
+other_letters_known = []
+letters_not_part = []
+while i == 1:
+    correct_answer = input("Was the answer correct? Yes or No?:  ")
+    if correct_answer == 'Yes':
+        i = 0
+        break
+    elif correct_answer == 'No':
+        i = 1
+
+    positional_letters_known = input("Input letter I guessed right in the correct spot. Eg: 00x00 for a 5 letter word, where x is a guessed correct letter. NB:Seperate by commas: ")
+    print(positional_letters_known)
+    
+    temp_other_letters_known = input("Input letters I guessed right in the wrong spot. Eg: 0t000 for a 5 letter word, where x is a guessed letter. NB:Seperate by commas:  ")
+    if temp_other_letters_known:
+        lists = []
+        lists.append(temp_other_letters_known.split(","))
+        for x in lists:
+            for y in x:
+                other_letters_known.append(y)
+
+    temp_letters_not_part = input("Input letters I guessed wrong  ")
+    if temp_letters_not_part:
+        lists = []
+        lists.append(temp_letters_not_part.split(","))
+        for x in lists:
+            for y in x:
+                letters_not_part.append(y)
+
+    a = wordle_word_generator(number_of_words,positional_letters_known,other_letters_known,letters_not_part)
+    
+    print(a)
+
+print('Congratulations!!!')
+    
