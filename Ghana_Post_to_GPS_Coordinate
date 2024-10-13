@@ -1,3 +1,7 @@
+#Changing Ghana Post Addressess to GPS Coordinates
+#Since Ghana Post does not have APIs to change Ghana Post Addresses to GPS Coordinates, this program was created to do that conversion using web scrapping
+#It was useful in converting 10's of thousands of Ghana Post Address into GPS Coordinates for a fibre deployment project I worked on
+
 from bs4 import BeautifulSoup
 import requests
 from selenium import webdriver
